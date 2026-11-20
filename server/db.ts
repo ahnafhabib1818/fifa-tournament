@@ -1,20 +1,21 @@
 import { and, desc, eq } from "drizzle-orm";
-import { drizzle } from "drizzle-orm/mysql2";
-import { InsertUser, TournamentRow, tournaments, users } from "../drizzle/schema";
-import type { TournamentState } from "../shared/tournament";
+import { drizzle, type NodePgDatabase } from "drizzle-orm/node-postgres";
+import { Pool } from "pg";
+import * as schema from "../drizzle-pg/schema";
+import type { InsertUser, TournamentRow, TournamentState } from "../drizzle-pg/schema";
+import { tournaments, users } from "../drizzle-pg/schema";
 import { ENV } from "./_core/env";
 
-let _db: ReturnType<typeof drizzle> | null = null;
+type Database = NodePgDatabase<typeof schema>;
+let _pool: Pool | null = null;
+let _db: Database | null = null;
 
-/** Lazily create the database client so local tooling can run without a DB. */
-export async function getDb() {
+/** Lazily create the PostgreSQL client so local tooling can run without a DB. */
+export async function getDb(): Promise<Database | null> {
   if (!_db && process.env.DATABASE_URL) {
-    try {
-      _db = drizzle(process.env.DATABASE_URL);
-    } catch (error) {
-      console.warn("[Database] Failed to connect:", error);
-      _db = null;
-    }
+    _pool = new Pool({ connectionString: process.env.DATABASE_URL, max: 5 });
+    _pool.on("error", (error) => console.error("[Database] Idle PostgreSQL client error:", error));
+    _db = drizzle(_pool, { schema });
   }
   return _db;
 }
@@ -25,8 +26,9 @@ export async function upsertUser(user: InsertUser): Promise<void> {
   if (!db) throw new Error("Database is not available");
 
   try {
-    const values: InsertUser = { openId: user.openId };
-    const updateSet: Record<string, unknown> = {};
+    const now = new Date();
+    const values: InsertUser = { openId: user.openId, updatedAt: now };
+    const updateSet: Record<string, unknown> = { updatedAt: now };
     const textFields = ["name", "email", "loginMethod"] as const;
     type TextField = (typeof textFields)[number];
     const assignNullable = (field: TextField) => {
@@ -48,9 +50,9 @@ export async function upsertUser(user: InsertUser): Promise<void> {
       values.role = "admin";
       updateSet.role = "admin";
     }
-    if (!values.lastSignedIn) values.lastSignedIn = new Date();
-    if (Object.keys(updateSet).length === 0) updateSet.lastSignedIn = new Date();
-    await db.insert(users).values(values).onDuplicateKeyUpdate({ set: updateSet });
+    if (!values.lastSignedIn) values.lastSignedIn = now;
+    if (Object.keys(updateSet).length === 0) updateSet.lastSignedIn = now;
+    await db.insert(users).values(values).onConflictDoUpdate({ target: users.openId, set: updateSet });
   } catch (error) {
     console.error("[Database] Failed to upsert user:", error);
     throw error;
@@ -109,12 +111,13 @@ export async function saveTournamentState(input: {
 }): Promise<void> {
   const db = await getDb();
   if (!db) throw new Error("Tournament archive database is not available.");
-  const result = await db.update(tournaments).set({
+  const updated = await db.update(tournaments).set({
     name: input.name,
     format: input.format,
     state: input.state,
     status: input.status,
     version: input.version + 1,
-  }).where(and(eq(tournaments.id, input.id), eq(tournaments.version, input.version)));
-  if (result[0].affectedRows === 0) throw new TournamentVersionConflictError();
+    updatedAt: new Date(),
+  }).where(and(eq(tournaments.id, input.id), eq(tournaments.version, input.version))).returning({ id: tournaments.id });
+  if (updated.length === 0) throw new TournamentVersionConflictError();
 }
