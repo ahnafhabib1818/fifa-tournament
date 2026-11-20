@@ -2,6 +2,8 @@
 
 বন্ধুদের FIFA tournament plan, fixtures, scores, standings এবং পুরোনো ম্যাচের স্মৃতি এক জায়গায় রাখার responsive ওয়েব অ্যাপ। Dashboard থেকে একক লিগ, গ্রুপ + নকআউট, অথবা সরাসরি নকআউট tournament তৈরি করা যায়; একই site-এর দর্শকেরা tournament দেখতে ও ফল update করতে পারে।
 
+**Live Demo:** [FIFA Tournament website খুলুন](https://fifa-tournament-g451.onrender.com)
+
 ## Tournament শুরু
 
 Dashboard থেকে **নতুন টুর্নামেন্ট** বেছে নাম ও দলসংখ্যা দাও। ক্লাবের নাম suggestion থেকে team বেছে নিতে পারো, অথবা custom name লিখতে পারো। Format নিজে বেছে নাও: একক লিগ, গ্রুপ + নকআউট, অথবা সরাসরি নকআউট। গ্রুপের সংখ্যা, প্রতি গ্রুপ থেকে qualifier সংখ্যা, অথবা league-এর পরে top 2/top 4/custom progression নির্ধারণ করো। দলসংখ্যা format auto-select করে না।
