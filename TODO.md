@@ -21,6 +21,7 @@
   - লীগ/গ্রুপ পয়েন্ট: জয় ৩, ড্র ১, হার ০। Played, win, draw, loss, goals for, goals against, goal difference ও points দেখাবে।
   - অবস্থান tie হলে goal difference, goals scored, head-to-head এবং প্রয়োজন হলে tie-breaker অনুসারে ক্রম হবে।
   - Score বদলালে standings ও advancement status পুনর্গণনা হবে; team qualifier knockout stage-এ পৌঁছাবে।
-- [ ] **Footballish responsive UI ও GitHub/Deploy delivery**
+- [x] **Footballish responsive UI ও GitHub/Deploy delivery**
   - “website footballish koro color shoho” — গাঢ় pitch green, football field/scoreboard cues, সাদা ও lime contrast-সহ ফুটবল-অনুপ্রাণিত, ব্যবহারবান্ধব responsive design থাকবে।
   - “github e new project baniye gitdiye deploy koro” — authorized GitHub access থাকলে নতুন repository তৈরি/সংযোগ, code `main`-এ push এবং website publish/deploy করে সফল URL জানাতে হবে; access না থাকলে নির্দিষ্ট blocker জানাতে হবে।
+  - Site `https://fifacup-3iu7fmpw.manus.space`-এ publicly published; production homepage, health endpoint এবং route manifest HTTP 200 দেয়।
