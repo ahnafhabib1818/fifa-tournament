@@ -1,0 +1,26 @@
+# TODO
+
+- [x] **প্রতিটি টুর্নামেন্ট স্থায়ীভাবে তৈরি, সংরক্ষণ ও পরে খোলার ব্যবস্থা**
+  - “protita tournament save kore rakha jabe eita amader sriti thakbe” — প্রতিটি টুর্নামেন্ট database-এ persist হবে, archive/list-এ দেখাবে এবং পুনরায় খুললে saved format, teams, fixtures ও results ফিরিয়ে আনবে।
+  - Shared tournament archive-এ সাইটের ব্যবহারকারীরা একই saved tournaments দেখবে; tournament তৈরি করার জন্য login বাধ্যতামূলক হবে না।
+  - Version-conditional save অন্য কারও নতুন result-কে নীরবে overwrite না করে conflict দেখাবে এবং সর্বশেষ record refresh করবে।
+- [x] **টিম বাছাই ও সংখ্যা নির্ধারণ**
+  - “team select korar option rakho” — আগে থেকে থাকা FIFA club quick-pick থেকে দল বেছে নেওয়া যাবে এবং custom team নাম যোগ করা যাবে।
+  - “koyta team tar option rakho” — অংশগ্রহণকারীরা নিজে দলের সংখ্যা ও তালিকা ঠিক করবে; team count tournament format নির্ধারণ করবে না।
+- [x] **নিজেদের পছন্দের Tournament format ও advancement rule নির্বাচন**
+  - “team er shongkha onujayi format na ei plan ta change koro format nije ra thik kore nite hobe” — team সংখ্যার ভিত্তিতে format automatic হবে না; ব্যবহারকারী সরাসরি single league, group stage then knockout, অথবা direct knockout বেছে নেবে।
+  - Group format-এ group count এবং প্রতি group থেকে কয়টি দল উঠবে ব্যবহারকারী নির্ধারণ করবে।
+  - League format-এ knockout না থাকা, top 2 final, top 4 semifinal অথবা custom top-N progression ব্যবহারকারী বেছে নেবে।
+  - তিন দলের single league-এ top 2 final, চার বা তার বেশি দলের league-এ top 4 semifinal—এসব শুধু user-selected setting/example; বাধ্যতামূলক team-count rule নয়।
+- [x] **Fixture তৈরি, সম্পাদনা ও knockout progression**
+  - “ar match er fixture o korba website e” — নির্বাচিত format অনুযায়ী website match fixtures তৈরি করে দেখাবে।
+  - বিজোড় league/group-এ bye/rest থাকবে এবং অসম group হলে যতটা সম্ভব balanced ভাগ হবে।
+  - Generated fixtures সম্পাদনা করা যাবে; knockout qualifier/winner পরের round-এ এগোবে, bye সমর্থিত হবে।
+- [x] **স্কোর, পয়েন্ট টেবিল ও ফলাফল পরিচালনা**
+  - Fixture-এ ম্যাচের score সংরক্ষণ করা যাবে; draw knockout-এ penalty score নথিভুক্ত করা যাবে।
+  - লীগ/গ্রুপ পয়েন্ট: জয় ৩, ড্র ১, হার ০। Played, win, draw, loss, goals for, goals against, goal difference ও points দেখাবে।
+  - অবস্থান tie হলে goal difference, goals scored, head-to-head এবং প্রয়োজন হলে tie-breaker অনুসারে ক্রম হবে।
+  - Score বদলালে standings ও advancement status পুনর্গণনা হবে; team qualifier knockout stage-এ পৌঁছাবে।
+- [ ] **Footballish responsive UI ও GitHub/Deploy delivery**
+  - “website footballish koro color shoho” — গাঢ় pitch green, football field/scoreboard cues, সাদা ও lime contrast-সহ ফুটবল-অনুপ্রাণিত, ব্যবহারবান্ধব responsive design থাকবে।
+  - “github e new project baniye gitdiye deploy koro” — authorized GitHub access থাকলে নতুন repository তৈরি/সংযোগ, code `main`-এ push এবং website publish/deploy করে সফল URL জানাতে হবে; access না থাকলে নির্দিষ্ট blocker জানাতে হবে।

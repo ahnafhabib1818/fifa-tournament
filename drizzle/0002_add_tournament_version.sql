@@ -1,0 +1,1 @@
+ALTER TABLE `tournaments` ADD `version` int DEFAULT 0 NOT NULL;
